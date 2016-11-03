@@ -11,13 +11,15 @@ release:
     image: release
     dockerfile_path: docker/release.Dockerfile
   volumes:
-    - ./tmp/out:/release
+    - ./tmp/out/release:/release
   encrypted_env_file: deployment.env.encrypted
 deploy:
   build:
     image: deploy
     dockerfile_path: docker/deploy.Dockerfile
   encrypted_env_file: deployment.env.encrypted
+  volumes:
+    - ./tmp/out/last_build:/vols/last_build
 test:
   build:
     image: test

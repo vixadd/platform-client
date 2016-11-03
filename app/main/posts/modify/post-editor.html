@@ -23,17 +23,22 @@
 
   <main role="main">
       <div class="toolbar">
-          <div class="button-group">
+          <div class="button-group" ng-show="post.id">
               <button type="button" class="button-flat" ng-click="cancel()" translate="app.cancel">Cancel</button>
               <button type="submit" class="button-alpha" translate="app.save">Save</button>
           </div>
+          <div class="button-group" ng-show="!post.id">
+              <post-share button="true" ng-show="!post.id"></post-share>
+              <button type="submit" class="button-alpha" translate="app.submit">Submit</button>
+          </div>
+
       </div>
 
      <div class="main-col">
 
           <div class="form-sheet">
               <div class="post-band" style="background-color: {{form.color}}"></div>
-              <div class="form-field title form-field-adapt init"
+              <div class="form-field title init required"
               adaptive-form
               ng-class="{
                 'error': postForm.title.$invalid && postForm.title.$dirty,
@@ -41,7 +46,7 @@
               }">
                   <label translate="post.modify.form.title">Title</label>
                   <input id="title"
-                      name="title" type="text" ng-model="post.title" required ng-minlength=2 ng-maxlength=150 adaptive-input>
+                      name="title" type="text" ng-model="post.title" ng-required="true" ng-minlength=2 ng-maxlength=150 adaptive-input>
 
                   <div
                       class="alert error"
@@ -56,7 +61,7 @@
               </div>
 
               <!-- Post stage default fields -->
-              <div class="form-field form-field-adapt init"
+              <div class="form-field init required"
                   ng-class="{
                     'error': postForm.content.$invalid && postForm.content.$dirty,
                     'success': !postForm.content.$invalid && postForm.content.$dirty
@@ -66,7 +71,7 @@
                       Description
                   </label>
                     <textarea id="content" name="content" data-min-rows="1" rows="1"
-                      ng-model="post.content" required adaptive-input msd-elastic>
+                      ng-model="post.content" ng-required="true" adaptive-input msd-elastic>
                     </textarea>
 
                   <div class="alert error" ng-show="postForm.content.$dirty" ng-repeat="(error, value) in postForm.content.$error">
@@ -85,6 +90,7 @@
                   post="post"
                   post-field=true
                   form="postForm"
+                  medias="medias"
                   attribute="attribute"
               ></post-value-edit>
               <!-- End Post custom fields -->
@@ -123,6 +129,18 @@
              attributes="attributes"
              visible-stage="visibleStage">
           </post-tabs>
+          <!-- <div class="form-sheet">
+            <div class="form-sheet-actions">
+                  <div class="form-field" ng-show="!post.id">
+                      <a href="timeline.html" type="submit" class="button button-alpha" translate="app.submit">Submit</a>
+                      <a href="post-add.html" class="button button-gamma button-flat" translate"app.submit_antoher">Submit &amp; add another</a>
+                  </div>
+                  <div class="form-field" ng-show="post.id">
+                      <a href="timeline.html" type="submit" class="button button-alpha" translate="app.save">Save</a>
+                      <a href="post-add.html" class="button button-gamma button-flat" ng-click="cancel()" translate"app.cancel">Cancel</a>
+                  </div>
+            </div>
+          </div> -->
           <div class="form-sheet" ng-if="post.id">
               <div class="form-sheet-summary">
                   <h3 class="form-sheet-title" translate="post.delete_post">Delete this post</h3>
@@ -140,7 +158,7 @@
               </div>
           </div>
 
-
+          <ush-logo></ush-logo>
       </div> <!-- END main column -->
 
   </main>

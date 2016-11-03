@@ -17,11 +17,21 @@ fi
 cat >> /opt/ansible.cfg << EOM
 
 [ssh_connection]
-ssh_args=
+control_path=/dev/shm/ansible-ssh-%%h-%%p-%%r
 EOM
 
 # ==> Get latest deployment code from github
 ansible-galaxy install -r roles.yml
 
-exec $*
+# Perform variable substitution on parameters
+#   i.e. if we get a parameter myvar="$CI_BRANCH" we substitute $CI_BRANCH for
+#        its actual value in the environment, and get i.e. myvar="master"
+args=()
+for p in $@; do
+    args+=(`printf '%s\n' $p | envsubst`)
+done
 
+# Execute parameter passed in arguments
+echo executing: "${args[@]}"
+
+exec "${args[@]}"
